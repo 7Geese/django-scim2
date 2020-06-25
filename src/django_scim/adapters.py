@@ -38,6 +38,7 @@ class SCIMMixin(object):
     ATTR_MAP = {}
 
     id_field = 'scim_id'  # Modifiable by overriding classes
+    external_id_field = 'scim_external_id'
 
     def __init__(self, obj, request=None):
         self.obj = obj
@@ -60,6 +61,10 @@ class SCIMMixin(object):
         return str(getattr(self.obj, self.id_field))
 
     @property
+    def external_id(self):
+        return str(getattr(self.obj, self.external_id_field))
+
+    @property
     def path(self):
         return reverse(self.url_name, kwargs={'uuid': self.id})
 
@@ -74,7 +79,7 @@ class SCIMMixin(object):
         """
         d = {
             'id': self.id,
-            'externalId': self.obj.scim_external_id,
+            'externalId': self.external_id,
         }
 
         return d
