@@ -167,6 +167,20 @@ class FilterMixin(object):
                         add_obj = False
                         break
 
+                elif '__' in attr_name:
+                    parts = attr_name.split('__')
+                    current_obj = obj
+                    for i, part in enumerate(parts):
+                        if not hasattr(current_obj, part):
+                            add_obj = False
+
+                        last_part = i == len(parts) - 1
+                        if last_part:
+                            if getattr(current_obj, part) != attr_val:
+                                add_obj = False
+                        else:
+                            current_obj = getattr(current_obj, part)
+
                 else:
                     if not hasattr(obj, attr_name) or getattr(obj, attr_name) != attr_val:
                         add_obj = False
